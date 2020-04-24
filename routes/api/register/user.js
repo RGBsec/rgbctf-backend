@@ -1,36 +1,27 @@
 const express = require('express');
 const debug = require('debug')('rgbctf-backend');
 const crypto = require('crypto');
+const config = require('../../../config');
 const User = require('../../../models/user');
 
 const router = express.Router();
 
 
-const genSalt = function generateSaltOfSpecifiedLength(length) {
-  return crypto.randomBytes(Math.ceil(length / 2))
-    .toString('hex')
-    .slice(0, length);
-};
+const genSalt = () => crypto.randomBytes(config.saltLength).toString('hex');
 
-const sha512 = function createSaltedSHA256Sum(password, salt) {
+const sha512 = function createSaltedSHA512Sum(password, salt) {
   const hash = crypto.createHmac('sha512', salt);
   hash.update(password);
-  const value = hash.digest('hex');
-  return {
-    salt,
-    passwordHash: value,
-  };
+  return hash.digest('hex');
 };
 
 
 router.post('/', (req, res) => {
   debug(`register/user: ${JSON.stringify(req.body)}`);
-  const salt = genSalt(16);
-  const hash = sha512(req.body.password, salt);
-
+  const salt = genSalt();
   const user = new User({
     name: req.body.name,
-    hash,
+    hash: sha512(req.body.password, salt),
     salt,
   });
   user.save((e) => {
