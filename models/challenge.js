@@ -6,7 +6,7 @@ const Challenge = new mongoose.Schema({
   id: [Number],
   description: [String],
   hints: [String],
-  staticScoring: [Boolean],
+  staticScoring: Boolean,
   points: Number,
 });
 
