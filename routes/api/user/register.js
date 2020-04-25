@@ -17,7 +17,6 @@ router.post('/', (req, res) => {
     salt,
     cookie,
   });
-  console.log(user.validateSync());
   if (user.validateSync()) {
     debug('register/user: invalid payload');
     res.send({ success: false, err: 'bad data' });
