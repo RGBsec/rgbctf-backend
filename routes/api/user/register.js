@@ -7,8 +7,8 @@ const crypto = require('../../../utils/crypto');
 const router = express.Router();
 
 
-router.post('/', (req, res) => {
-  debug(`register/user: ${JSON.stringify(req.body)}`);
+router.post('/api/user/register', (req, res) => {
+  debug(`/api/user/register: ${JSON.stringify(req.body)}`);
   const salt = crypto.genBytes(config.saltLength);
   const cookie = crypto.genBytes(config.cookieLength);
   const user = new User({
@@ -18,14 +18,14 @@ router.post('/', (req, res) => {
     cookie,
   });
   if (user.validateSync()) {
-    debug('register/user: invalid payload');
+    debug('api/user/register: invalid payload');
     res.send({ success: false, err: 'bad data' });
     res.end();
     return;
   }
   user.save((e) => {
     if (e) {
-      debug(`register/user: err: ${e}`);
+      debug(`api/user/register: err: ${e}`);
       res.send({ success: false, err: 'internal error' });
       res.end();
       return;
