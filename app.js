@@ -1,4 +1,5 @@
 const express = require('express');
+const session = require('express-session');
 const debug = require('debug')('rgbctf-backend');
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -14,6 +15,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({ secret: process.env.COOKIESECRET }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('port', process.env.PORT || 3000);

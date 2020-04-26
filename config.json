@@ -1,3 +1,4 @@
 {
-  "saltLength": 8
+  "saltLength": 8,
+  "cookieLength": 16
 }
