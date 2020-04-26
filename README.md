@@ -3,6 +3,10 @@
   <img alt="Version" src="https://img.shields.io/badge/version-0.0.1-blue.svg?cacheSeconds=2592000" />
   <img src="https://img.shields.io/badge/npm-%3E%3D6.14.4-blue.svg" />
   <img src="https://img.shields.io/badge/node-%3E%3D10.20.1-blue.svg" />
+    <a href="https://github.com/RGBsec/rgbctf-backend#readme" target="_blank">
+    <img alt="Issues" src="https://img.shields.io/github/issues/RGBsec/rgbctf-backend" />
+  </a>
+  
   <a href="https://github.com/RGBsec/rgbctf-backend#readme" target="_blank">
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
   </a>
@@ -10,7 +14,7 @@
     <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" />
   </a>
   <a href="https://github.com/RGBsec/rgbctf-backend/blob/master/LICENSE" target="_blank">
-    <img alt="License: MIT" src="https://img.shields.io/github/license/RGBsec/rgbCTF" />
+    <img alt="License: MIT" src="https://img.shields.io/github/license/RGBsec/rgbctf-backend" />
   </a>
 </p>
 
