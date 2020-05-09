@@ -7,4 +7,4 @@ const User = new mongoose.Schema({
   cookie: String,
 });
 
-module.exports = mongoose.model('User', User);
+module.exports = mongoose.model('user', User);

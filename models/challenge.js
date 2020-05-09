@@ -10,7 +10,4 @@ const Challenge = new mongoose.Schema({
   points: Number,
 });
 
-module.exports = mongoose.model('Challenge', Challenge);
-
-
-
+module.exports = mongoose.model('challenge', Challenge);

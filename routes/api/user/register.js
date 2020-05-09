@@ -1,5 +1,6 @@
 const express = require('express');
 const debug = require('debug')('rgbctf-backend');
+const Joi = require('@hapi/joi');
 const config = require('../../../config');
 const User = require('../../../models/user');
 const crypto = require('../../../utils/crypto');
@@ -7,22 +8,26 @@ const crypto = require('../../../utils/crypto');
 const router = express.Router();
 
 
+const requestSchema = Joi.object({
+  name: Joi.string().required(),
+  password: Joi.string().required(),
+});
+
 router.post('/', (req, res) => {
   debug(`register/user: ${JSON.stringify(req.body)}`);
+  const validatedBody = requestSchema.validate(req.body);
+  if (validatedBody.error) {
+    res.send({ sucess: false, err: 'invalid payload' });
+    res.end();
+  }
   const salt = crypto.genBytes(config.saltLength);
   const cookie = crypto.genBytes(config.cookieLength);
   const user = new User({
-    name: req.body.name,
-    hash: crypto.sha512(req.body.password, salt),
+    name: validatedBody.value.name,
+    hash: crypto.sha512(validatedBody.value.password, salt),
     salt,
     cookie,
   });
-  if (user.validateSync()) {
-    debug('register/user: invalid payload');
-    res.send({ success: false, err: 'bad data' });
-    res.end();
-    return;
-  }
   user.save((e) => {
     if (e) {
       debug(`register/user: err: ${e}`);
