@@ -14,9 +14,9 @@ const requestSchema = Joi.object({
 });
 
 router.post('/', (req, res) => {
-  debug(`register/user: ${JSON.stringify(req.body)}`);
   const validatedBody = requestSchema.validate(req.body);
   if (validatedBody.error) {
+    debug(`register/user: invalid payload: ${JSON.stringify(req.body)}`);
     res.send({ sucess: false, err: 'invalid payload' });
     res.end();
   }
@@ -28,7 +28,7 @@ router.post('/', (req, res) => {
     salt,
     cookie,
   });
-  user.exists({ name: validatedBody.value.name }, (e, exists) => {
+  User.exists({ name: validatedBody.value.name }, (e, exists) => {
     if (e) {
       debug(`register/user: err: ${e}`);
       res.send({ success: false, err: 'internal error' });

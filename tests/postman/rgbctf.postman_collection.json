@@ -1,0 +1,49 @@
+{
+	"info": {
+		"_postman_id": "a5e91411-d4e5-42e2-a676-d51173b03456",
+		"name": "rgbctf",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "register user",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\": \"awooga man\", \"password\": [\"w\", 1]}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:3000/api/user/register",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"user",
+						"register"
+					]
+				},
+				"description": "register a user to play in the ctf"
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
