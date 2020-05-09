@@ -28,17 +28,29 @@ router.post('/', (req, res) => {
     salt,
     cookie,
   });
-  user.save((e) => {
+  user.exists({ name: validatedBody.value.name }, (e, exists) => {
     if (e) {
       debug(`register/user: err: ${e}`);
       res.send({ success: false, err: 'internal error' });
       res.end();
       return;
     }
-    req.session.secret = cookie;
-    res.send({ success: true, msg: 'registered' });
-    res.end();
+    if (exists) {
+      res.send({ success: false, err: 'username exists' });
+      res.end();
+    } else {
+      user.save((e) => {
+        if (e) {
+          debug(`register/user: err: ${e}`);
+          res.send({ success: false, err: 'internal error' });
+          res.end();
+          return;
+        }
+        req.session.secret = cookie;
+        res.send({ success: true, msg: 'registered' });
+        res.end();
+      });
+    }
   });
 });
-
 module.exports = router;

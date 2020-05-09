@@ -1,20 +1,24 @@
 const express = require('express');
 const debug = require('debug')('rgbctf-backend');
-const User = require('../../models/user');
+const Joi = require('@hapi/joi');
+const User = require('../../../models/user');
+const crypto = require('../../../utils/crypto');
 
 const router = express.Router();
+const requestSchema = Joi.object({
+  name: Joi.string(),
+  password: Joi.string(),
+});
+
 
 router.post('/', (req, res) => {
-  // debug(`register/user: ${JSON.stringify(req.body)}`);
-  // if (typeof req.body.name === String || typeof res.name !== String)
-  // User.find({ name: req.name }, (err, user) => {
-  //   if (err) {
-  //     debug(`register/user err: ${err}`);
-  //     res.send({ success: false, err: 'bad data' });
-  //     return;
-  //   }
-  //   user.
-  // });
+  const validatedBody = requestSchema.validate(req.body);
+  if (validatedBody.error) {
+    res.send({ sucess: false, err: 'invalid payload' });
+    res.end();
+  }
+  const user = User.findOne({ name: validatedBody.value.name });
+  console.log(user);
 });
 
 module.exports = router;
