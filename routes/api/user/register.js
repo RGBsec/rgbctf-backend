@@ -39,9 +39,9 @@ router.post('/', (req, res) => {
       res.send({ success: false, err: 'username exists' });
       res.end();
     } else {
-      user.save((e) => {
-        if (e) {
-          debug(`register/user: err: ${e}`);
+      user.save((saveE) => {
+        if (saveE) {
+          debug(`register/user: err: ${saveE}`);
           res.send({ success: false, err: 'internal error' });
           res.end();
           return;
