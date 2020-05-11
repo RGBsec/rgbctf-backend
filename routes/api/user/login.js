@@ -7,20 +7,22 @@ const config = require('../../../config');
 
 const router = express.Router();
 const requestSchema = Joi.object({
-  name: Joi.string(),
-  password: Joi.string(),
+  name: Joi.string().required(),
+  password: Joi.string().required(),
 });
 
 
 router.post('/', (req, res) => {
   const validatedBody = requestSchema.validate(req.body);
   if (validatedBody.error) {
-    res.send({ sucess: false, err: 'invalid payload' });
+    res.send({ success: false, err: 'invalid payload' });
     res.end();
+    return;
   }
-  User.findOne({ name: validatedBody.value.name }, 'hash salt', (e, user) => {
+  const { name, password } = validatedBody.value;
+  User.findOne({ name }, 'hash salt', (e, user) => {
     if (e) {
-      debug(`register/user: err: ${e}`);
+      debug(`login/user: err: ${e}`);
       res.send({ success: false, err: 'internal error' });
       res.end();
       return;
@@ -28,7 +30,7 @@ router.post('/', (req, res) => {
     if (user === null) {
       res.send({ success: false, err: 'username does not exist' });
       res.end();
-    } else if (crypto.sha512(validatedBody.value.password, user.salt) === user.hash) {
+    } else if (crypto.sha512(password, user.salt) === user.hash) {
       const cookie = crypto.genBytes(config.cookieLength);
       // eslint-disable-next-line no-underscore-dangle
       User.findByIdAndUpdate(user._id, { cookie }, () => {

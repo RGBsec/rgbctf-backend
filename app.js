@@ -23,6 +23,7 @@ app.set('port', process.env.PORT || 3000);
 mongoose.connect(process.env.MONGODB, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  useFindAndModify: false,
 }).then((r) => {
   debug(`mongoDB connected to on port ${r.connection.port}`);
 }).catch((e) => {
