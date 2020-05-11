@@ -7,6 +7,9 @@
 	"item": [
 		{
 			"name": "register user",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
 			"request": {
 				"method": "POST",
 				"header": [
@@ -18,7 +21,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"name\": \"awooga man\", \"password\": [\"w\", 1]}",
+					"raw": "{\n    \"name\": \"username\",\n    \"password\": \"password\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -41,6 +44,54 @@
 					]
 				},
 				"description": "register a user to play in the ctf"
+			},
+			"response": []
+		},
+		{
+			"name": "login user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:3000/api/user/login",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"user",
+						"login"
+					]
+				},
+				"description": "login as a user"
+			},
+			"response": []
+		},
+		{
+			"name": "logout user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:3000/api/user/logout",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"user",
+						"logout"
+					]
+				},
+				"description": "logs out user"
 			},
 			"response": []
 		}
