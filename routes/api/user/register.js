@@ -33,21 +33,21 @@ router.post('/', (req, res) => {
       res.end();
     } else {
       const salt = crypto.genBytes(config.saltLength);
-      const cookie = crypto.genBytes(config.cookieLength);
       const user = new User({
         name,
         hash: crypto.sha512(password, salt),
         salt,
-        cookie,
+        teamId: null,
       });
-      user.save((saveE) => {
+      user.save((saveE, savedUser) => {
         if (saveE) {
           debug(`register/user: err: ${saveE}`);
           res.send({ success: false, err: 'internal error' });
           res.end();
           return;
         }
-        req.session.secret = cookie;
+        // eslint-disable-next-line no-underscore-dangle
+        req.session.userId = savedUser._id;
         res.send({ success: true, msg: 'registered' });
         res.end();
       });

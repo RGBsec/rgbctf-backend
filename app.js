@@ -1,5 +1,6 @@
 const express = require('express');
 const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 const debug = require('debug')('rgbctf-backend');
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -11,15 +12,6 @@ const fs = require('fs');
 dotenv.config();
 const app = express();
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(session({ secret: process.env.COOKIESECRET }));
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.set('port', process.env.PORT || 3000);
-
 mongoose.connect(process.env.MONGODB, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -29,6 +21,24 @@ mongoose.connect(process.env.MONGODB, {
 }).catch((e) => {
   debug(`err connecting to mongodb: ${e}`);
 });
+
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(session({
+  secret: process.env.COOKIESECRET,
+  saveUninitialized: false,
+  unset: 'destroy',
+  name: 'rgbctf_session_id',
+  resave: false,
+  store: new MongoStore({
+    mongooseConnection: mongoose.connection,
+  }),
+}));
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.set('port', process.env.PORT || 3000);
 
 const getRoutes = (dir) => {
   fs.readdirSync(dir).forEach((p) => {
