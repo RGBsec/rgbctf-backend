@@ -21,7 +21,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"username\",\n    \"password\": \"password\"\n}",
+					"raw": "{\n    \"name\": \"testUser\",\n    \"password\": \"testPassword\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -52,6 +52,15 @@
 			"request": {
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"testUser\",\n\t\"password\": \"testPassword\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
 					"raw": "127.0.0.1:3000/api/user/login",
 					"host": [
@@ -92,6 +101,72 @@
 					]
 				},
 				"description": "logs out user"
+			},
+			"response": []
+		},
+		{
+			"name": "create team",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"team\",\n\t\"inviteCode\": \"secretCode\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:3000/api/team/create",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"team",
+						"create"
+					]
+				},
+				"description": "create a new team"
+			},
+			"response": []
+		},
+		{
+			"name": "join team",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"team\",\n\t\"inviteCode\": \"secretCode\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:3000/api/team/join",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"team",
+						"join"
+					]
+				},
+				"description": "join a team"
 			},
 			"response": []
 		}
