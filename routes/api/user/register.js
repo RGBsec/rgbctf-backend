@@ -20,15 +20,8 @@ router.post('/', (req, res) => {
     res.send({ sucess: false, err: 'invalid payload' });
     res.end();
   }
-  const salt = crypto.genBytes(config.saltLength);
-  const cookie = crypto.genBytes(config.cookieLength);
-  const user = new User({
-    name: validatedBody.value.name,
-    hash: crypto.sha512(validatedBody.value.password, salt),
-    salt,
-    cookie,
-  });
-  User.exists({ name: validatedBody.value.name }, (e, exists) => {
+  const { name, password } = validatedBody.value;
+  User.exists({ name }, (e, exists) => {
     if (e) {
       debug(`register/user: err: ${e}`);
       res.send({ success: false, err: 'internal error' });
@@ -39,6 +32,14 @@ router.post('/', (req, res) => {
       res.send({ success: false, err: 'username exists' });
       res.end();
     } else {
+      const salt = crypto.genBytes(config.saltLength);
+      const cookie = crypto.genBytes(config.cookieLength);
+      const user = new User({
+        name,
+        hash: crypto.sha512(password, salt),
+        salt,
+        cookie,
+      });
       user.save((saveE) => {
         if (saveE) {
           debug(`register/user: err: ${saveE}`);
@@ -53,4 +54,5 @@ router.post('/', (req, res) => {
     }
   });
 });
+
 module.exports = router;
