@@ -34,6 +34,7 @@ router.post('/', (req, res) => {
         name,
         inviteCode,
         members: [req.session.userId],
+        points: 0,
       });
       team.save((saveE, savedTeam) => {
         if (saveE) {
