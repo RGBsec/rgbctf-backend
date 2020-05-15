@@ -6,7 +6,7 @@
     <a href="https://github.com/RGBsec/rgbctf-backend#readme" target="_blank">
     <img alt="Issues" src="https://img.shields.io/github/issues/RGBsec/rgbctf-backend" />
   </a>
-  
+
   <a href="https://github.com/RGBsec/rgbctf-backend#readme" target="_blank">
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
   </a>
@@ -22,7 +22,7 @@
 
 ### 🏠 [Homepage](https://github.com/RGBsec/rgbctf-backend#readme)
 
-### ✨ [Demo](https://ctf.rgbsec.xyz (not up currently))
+### ✨ [Demo (not up currently)](https://ctf.rgbsec.xyz (not up currently))
 
 ## Prerequisites
 
@@ -36,6 +36,14 @@ npm install
 ```
 
 ## Usage
+
+Create a `.env` file in the local directory with these values:
+
+- `MONGODB`: Required. This is a [MongoDB connection string](https://docs.mongodb.com/manual/reference/connection-string/) used to connect to the backend database. If authentication or SSL is enabled, you must specify that in the connection string via the respective fields.
+- `COOKIESECRET`: Required. This is the secret used for [express-session](https://www.npmjs.com/package/express-session). This is used to sign the session ID cookie. It is recommended that this value is randomly generated.
+- `PORT`: Optional. This is the port used for this application. It defaults to `3000` if not specified.
+
+Then, to start the application, run:
 
 ```sh
 npm run start
