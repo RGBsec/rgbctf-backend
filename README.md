@@ -42,7 +42,7 @@ Create a `.env` file in the local directory with these values:
 - `MONGODB`: Required. This is a [MongoDB connection string](https://docs.mongodb.com/manual/reference/connection-string/) used to connect to the backend database. If authentication or SSL is enabled, you must specify that in the connection string via the respective fields.
 - `COOKIESECRET`: Required. This is the secret used for [express-session](https://www.npmjs.com/package/express-session). This is used to sign the session ID cookie. It is recommended that this value is randomly generated.
 - `PORT`: Optional. This is the port used for this application. It defaults to `3000` if not specified.
-
+- `DEBUG`: Optional. Setting it to "rgbctf-backend" will cause debug messages to be logged.
 Then, to start the application, run:
 
 ```sh
