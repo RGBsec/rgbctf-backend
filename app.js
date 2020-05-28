@@ -9,35 +9,49 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const fs = require('fs');
 const helmet = require('helmet');
+const cors = require('cors');
 
 dotenv.config();
 const app = express();
 
-mongoose.connect(process.env.MONGODB, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-}).then((r) => {
-  debug(`mongoDB connected to on port ${r.connection.port}`);
-}).catch((e) => {
-  debug(`err connecting to mongodb: ${e}`);
-});
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  optionsSuccessStatus: 200,
+  credentials: true,
+};
+
+if (process.env.ALLOWCORS) app.use(cors(corsOptions)); // just for testing the frontend
+
+mongoose
+  .connect(process.env.MONGODB, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+  })
+  .then((r) => {
+    debug(`mongoDB connected to on port ${r.connection.port}`);
+  })
+  .catch((e) => {
+    debug(`err connecting to mongodb: ${e}`);
+  });
 
 app.use(helmet());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(session({
-  secret: process.env.COOKIESECRET,
-  saveUninitialized: false,
-  unset: 'destroy',
-  name: 'rgbctf_session_id',
-  resave: false,
-  store: new MongoStore({
-    mongooseConnection: mongoose.connection,
+app.use(
+  session({
+    secret: process.env.COOKIESECRET,
+    saveUninitialized: false,
+    unset: 'destroy',
+    name: 'rgbctf_session_id',
+    resave: false,
+    store: new MongoStore({
+      mongooseConnection: mongoose.connection,
+    }),
   }),
-}));
+);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('port', process.env.PORT || 3000);

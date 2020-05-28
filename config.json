@@ -1,4 +1,3 @@
 {
-  "saltLength": 8,
-  "cookieLength": 16
+  "bcryptCost": 10
 }

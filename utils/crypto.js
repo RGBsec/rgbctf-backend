@@ -1,14 +1,9 @@
-const crypto = require('crypto');
+const bcrypt = require('bcrypt');
 
-const genBytes = (amount) => crypto.randomBytes(amount).toString('hex');
-
-const sha512 = function createSaltedSHA512Sum(password, salt) {
-  const hash = crypto.createHmac('sha512', salt);
-  hash.update(password);
-  return hash.digest('hex');
-};
+const hashPassword = (password, cost) => bcrypt.hash(password, cost);
+const checkPassword = (password, encodedPassword) => bcrypt.compare(password, encodedPassword);
 
 module.exports = {
-  genBytes,
-  sha512,
+  hashPassword,
+  checkPassword,
 };
