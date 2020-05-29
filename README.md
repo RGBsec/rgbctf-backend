@@ -43,6 +43,7 @@ Create a `.env` file in the local directory with these values:
 - `COOKIESECRET`: Required. This is the secret used for [express-session](https://www.npmjs.com/package/express-session). This is used to sign the session ID cookie. It is recommended that this value is randomly generated.
 - `PORT`: Optional. This is the port used for this application. It defaults to `3000` if not specified.
 - `DEBUG`: Optional. Setting it to "rgbctf-backend" will cause debug messages to be logged.
+- `ALLOWCORS`: Optional. If present with any non-empty string, CORS will be enabled with an origin of `http://localhost:3000`. This is mainly used for testing the frontend with the API.
 Then, to start the application, run:
 
 ```sh
