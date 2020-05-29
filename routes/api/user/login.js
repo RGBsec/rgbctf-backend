@@ -29,16 +29,20 @@ router.post('/', (req, res) => {
     if (user === null) {
       res.send({ success: false, err: 'username does not exist' });
       res.end();
-    } else if (crypto.sha512(password, user.salt) === user.hash) {
-      // eslint-disable-next-line no-underscore-dangle
-      req.session.userId = user._id;
-      res.send({ success: true, msg: 'logged in' });
-      res.end();
-    } else {
-      res.send({ success: false, err: 'wrong password' });
-      res.end();
     }
+    crypto.checkPassword(password, user.hash).then((success) => {
+      if (success) {
+        // eslint-disable-next-line no-underscore-dangle
+        req.session.userId = user._id;
+        res.send({ success: true, msg: 'logged in' });
+        res.end();
+      } else {
+        res.send({ success: false, err: 'wrong password' });
+        res.end();
+      }
+    });
   });
 });
+
 
 module.exports = router;

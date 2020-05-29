@@ -7,7 +7,6 @@ const crypto = require('../../../utils/crypto');
 
 const router = express.Router();
 
-
 const requestSchema = Joi.object({
   name: Joi.string().required(),
   password: Joi.string().required(),
@@ -32,25 +31,28 @@ router.post('/', (req, res) => {
       res.send({ success: false, err: 'username exists' });
       res.end();
     } else {
-      const salt = crypto.genBytes(config.saltLength);
-      const user = new User({
-        name,
-        hash: crypto.sha512(password, salt),
-        salt,
-        teamId: null,
-      });
-      user.save((saveE, savedUser) => {
-        if (saveE) {
-          debug(`register/user: err: ${saveE}`);
-          res.send({ success: false, err: 'internal error' });
-          res.end();
-          return;
-        }
-        // eslint-disable-next-line no-underscore-dangle
-        req.session.userId = savedUser._id;
-        res.send({ success: true, msg: 'registered' });
-        res.end();
-      });
+      crypto
+        .hashPassword(password, config.bcryptCost)
+        .then((hashedPassword) => {
+          const user = new User({
+            name,
+            hash: hashedPassword,
+            teamId: null,
+          });
+
+          user.save((saveE, savedUser) => {
+            if (saveE) {
+              debug(`register/user: err: ${saveE}`);
+              res.send({ success: false, err: 'internal error' });
+              res.end();
+              return;
+            }
+            // eslint-disable-next-line no-underscore-dangle
+            req.session.userId = savedUser._id;
+            res.send({ success: true, msg: 'registered' });
+            res.end();
+          });
+        });
     }
   });
 });
