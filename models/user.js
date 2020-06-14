@@ -5,6 +5,8 @@ const User = new mongoose.Schema({
   hash: String,
   salt: String,
   teamId: String,
+  email: String,
+  confirmedEmail: Boolean
 });
 
 module.exports = mongoose.model('user', User);

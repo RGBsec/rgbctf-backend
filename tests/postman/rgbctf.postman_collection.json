@@ -21,7 +21,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"testUser\",\n    \"password\": \"testPassword\"\n}",
+					"raw": "{\n    \"name\": \"testUser\",\n    \"email\": \"testUser@example.com\",\n    \"password\": \"testPassword\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
