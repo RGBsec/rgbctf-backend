@@ -29,6 +29,7 @@ router.post('/', (req, res) => {
     if (user === null) {
       res.send({ success: false, err: 'username does not exist' });
       res.end();
+      return;
     }
     crypto.checkPassword(password, user.hash).then((success) => {
       if (success) {
