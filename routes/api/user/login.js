@@ -5,10 +5,21 @@ const User = require('../../../models/user');
 const crypto = require('../../../utils/crypto');
 
 const router = express.Router();
-const requestSchema = Joi.object({
-  name: Joi.string().required(),
-  password: Joi.string().required(),
-});
+const requestSchema = Joi.alternatives().try(
+  Joi.object({
+    name: Joi.string().required(),
+    password: Joi.string().required()
+  }),
+  Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().required()
+  }),
+  Joi.object({
+    name: Joi.string().required(),
+    email: Joi.string().email().required(),
+    password: Joi.string().required()
+  })
+)
 
 
 router.post('/', (req, res) => {
@@ -18,8 +29,8 @@ router.post('/', (req, res) => {
     res.end();
     return;
   }
-  const { name, password } = validatedBody.value;
-  User.findOne({ name }, 'hash salt', (e, user) => {
+  const { name, email, password } = validatedBody.value;
+  const handler = (e, user) => {
     if (e) {
       debug(`login/user: err: ${e}`);
       res.send({ success: false, err: 'internal error' });
@@ -27,7 +38,7 @@ router.post('/', (req, res) => {
       return;
     }
     if (user === null) {
-      res.send({ success: false, err: 'username does not exist' });
+      res.send({ success: false, err: 'username or email does not exist' });
       res.end();
       return;
     }
@@ -42,7 +53,13 @@ router.post('/', (req, res) => {
         res.end();
       }
     });
-  });
+  };
+  
+  if (email == null) {
+    User.findOne({ name }, 'hash salt', handler);
+  } else {
+    User.findOne({ email }, 'hash salt', handler);
+  }
 });
 
 
