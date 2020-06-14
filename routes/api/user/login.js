@@ -26,7 +26,7 @@ router.post('/', (req, res) => {
       res.end();
       return;
     }
-    if (user === null) {
+    if (user == null) {
       res.send({ success: false, err: 'username does not exist' });
       res.end();
     }
