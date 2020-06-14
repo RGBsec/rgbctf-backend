@@ -9,6 +9,7 @@ const router = express.Router();
 
 const requestSchema = Joi.object({
   name: Joi.string().required(),
+  email: Joi.string().email().required(),
   password: Joi.string().required(),
 });
 
@@ -16,11 +17,11 @@ router.post('/', (req, res) => {
   const validatedBody = requestSchema.validate(req.body);
   if (validatedBody.error) {
     debug(`register/user: invalid payload: ${JSON.stringify(req.body)}`);
-    res.send({ sucess: false, err: 'invalid payload' });
+    res.send({ success: false, err: 'invalid payload' });
     res.end();
   }
-  const { name, password } = validatedBody.value;
-  User.exists({ name }, (e, exists) => {
+  const { name, email, password } = validatedBody.value;
+  User.exists({ $or: [{email}, {name}] }, (e, exists) => {
     if (e) {
       debug(`register/user: err: ${e}`);
       res.send({ success: false, err: 'internal error' });
@@ -28,7 +29,7 @@ router.post('/', (req, res) => {
       return;
     }
     if (exists) {
-      res.send({ success: false, err: 'username exists' });
+      res.send({ success: false, err: 'username or email exists' });
       res.end();
     } else {
       crypto
@@ -36,10 +37,12 @@ router.post('/', (req, res) => {
         .then((hashedPassword) => {
           const user = new User({
             name,
+            email,
             hash: hashedPassword,
             teamId: null,
+            email_confirmed: false
           });
-
+          // TODO: We need to confirm emails somehow and add more checks for email validation for some other things, where deemed necessary.
           user.save((saveE, savedUser) => {
             if (saveE) {
               debug(`register/user: err: ${saveE}`);
