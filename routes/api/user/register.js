@@ -40,7 +40,7 @@ router.post('/', (req, res) => {
             email,
             hash: hashedPassword,
             teamId: null,
-            email_confirmed: false
+            confirmedEmail: false
           });
           // TODO: We need to confirm emails somehow and add more checks for email validation for some other things, where deemed necessary.
           user.save((saveE, savedUser) => {
