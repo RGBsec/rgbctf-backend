@@ -37,7 +37,7 @@
         "express": "~4.17.1",
         "express-session": "^1.17.1",
         "helmet": "^3.23.0",
-        "mongoose": "^5.9.18",
+        "mongoose": "^5.9.19",
         "morgan": "~1.10.0",
         "react": "^16.13.1"
     }
