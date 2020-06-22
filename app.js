@@ -1,6 +1,7 @@
 const express = require('express');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
+const debug = require('debug')('rgbctf-backend');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -11,8 +12,6 @@ const helmet = require('helmet');
 const cors = require('cors');
 
 dotenv.config();
-const debug = require('debug')('rgbctf-backend');
-
 const app = express();
 
 const corsOptions = {

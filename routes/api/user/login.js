@@ -5,22 +5,21 @@ const User = require('../../../models/user');
 const crypto = require('../../../utils/crypto');
 
 const router = express.Router();
-
 const requestSchema = Joi.alternatives().try(
   Joi.object({
     name: Joi.string().required(),
-    password: Joi.string().required(),
+    password: Joi.string().required()
   }),
   Joi.object({
     email: Joi.string().email().required(),
-    password: Joi.string().required(),
+    password: Joi.string().required()
   }),
   Joi.object({
     name: Joi.string().required(),
     email: Joi.string().email().required(),
-    password: Joi.string().required(),
-  }),
-);
+    password: Joi.string().required()
+  })
+)
 
 
 router.post('/', (req, res) => {
@@ -55,6 +54,7 @@ router.post('/', (req, res) => {
       }
     });
   };
+  
   if (email == null) {
     User.findOne({ name }, 'hash salt', handler);
   } else {
