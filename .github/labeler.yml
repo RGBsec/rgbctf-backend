@@ -1,5 +1,4 @@
-dependencies:
-- any: ['package.json', 'package-lock.json']
+dependencies: package.json
 
 documentation:
-- any: ['**/*.md']
+- /**/*.md
