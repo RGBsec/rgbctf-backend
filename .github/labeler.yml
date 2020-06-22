@@ -1,0 +1,5 @@
+dependencies:
+- any: ['package.json', 'package-lock.json']
+
+documentation:
+- any: ['**/*.md']
