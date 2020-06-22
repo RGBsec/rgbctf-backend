@@ -37,6 +37,7 @@ const register = (name, inviteCode, userId, callback) => {
   });
 };
 
+// Join a team, with the user ID being the user to add.
 const join = (name, inviteCode, userId, callback) => {
   User.findById(userId, 'teamId').then((user) => {
     if (user.teamId !== null) {
