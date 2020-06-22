@@ -21,7 +21,7 @@ router.post('/', (req, res) => {
     res.end();
   }
   const { name, email, password } = validatedBody.value;
-  User.exists({ $or: [{email}, {name}] }, (e, exists) => {
+  User.exists({ $or: [{ email }, { name }] }, (e, exists) => {
     if (e) {
       debug(`register/user: err: ${e}`);
       res.send({ success: false, err: 'internal error' });
@@ -40,9 +40,10 @@ router.post('/', (req, res) => {
             email,
             hash: hashedPassword,
             teamId: null,
-            confirmedEmail: false
+            confirmedEmail: false,
           });
-          // TODO: We need to confirm emails somehow and add more checks for email validation for some other things, where deemed necessary.
+          // TODO: We need to confirm emails somehow and add more checks for
+          // email validation for some other things, where deemed necessary.
           user.save((saveE, savedUser) => {
             if (saveE) {
               debug(`register/user: err: ${saveE}`);
