@@ -1,11 +1,11 @@
 const express = require('express');
-const debug = require('debug')('rgbctf-backend');
 const Joi = require('@hapi/joi');
-const Team = require('../../../models/team');
-const User = require('../../../models/user');
+const team = require('../../../utils/team');
 
 const router = express.Router();
 
+// When changing the request schema here, be sure to update it in /routes/api/user/register.js
+// and update the associated methods in /utils/team.js
 const requestSchema = Joi.object({
   name: Joi.string().required(),
   inviteCode: Joi.string().required(),
@@ -19,42 +19,18 @@ router.post('/', (req, res) => {
     return;
   }
   const { name, inviteCode } = validatedBody.value;
-  Team.exists({ name }, (e, exists) => {
-    if (e) {
-      debug(`create/team: err: ${e}`);
-      res.send({ success: false, err: 'internal error' });
-      res.end();
-      return;
-    }
-    if (exists) {
-      res.send({ success: false, err: 'team name exists' });
-      res.end();
-    } else {
-      const team = new Team({
-        name,
-        inviteCode,
-        members: [req.session.userId],
-        points: 0,
-      });
-      team.save((saveE, savedTeam) => {
-        if (saveE) {
-          debug(`create/team: err: ${saveE}`);
-          res.send({ success: false, err: 'internal error' });
-          res.end();
-          return;
-        }
-        // eslint-disable-next-line no-underscore-dangle
-        User.findByIdAndUpdate(req.session.userId, { teamId: savedTeam._id }, (updateE) => {
-          if (updateE) {
-            debug(`create/team: err: ${saveE}`);
-            res.send({ success: false, err: 'internal error' });
-          } else {
-            res.send({ success: true, msg: 'team created' });
-          }
-          res.end();
-        });
-      });
-    }
+
+  if (req.session.userId == null) {
+    res.send({ success: false, err: 'not logged in' });
+    res.end();
+    return;
+  }
+
+  // This code was abstracted to /utils/team.js to allow for simpler code
+  // when making a team on registration.
+  team.register(name, inviteCode, req.session.userId, (response) => {
+    res.send(response);
+    res.end();
   });
 });
 
