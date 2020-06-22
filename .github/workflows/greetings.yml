@@ -1,0 +1,45 @@
+name: Greetings
+
+on: [pull_request, issues]
+
+jobs:
+  greeting:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/first-interaction@v1
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        issue-message: |
+Hey there! Thank you for submitting your first issue to rgbCTF!
+
+**If this is a security vulnerability in rgbCTF, ping `chop0`, `ThePuzzlemaker`, or `pepsipu` immediately,
+and the issue will be deleted for security. Then, [send the details to us at rgbsec@rgbsec.xyz](mailto:rgbsec@rgbsec.xyz).**
+
+If you haven''t already, you may want to take a look at our [contribution guide](https://github.com/RGBsec/rgbctf-backend/blog/master/CONTRIBUTING.md)
+
+We check issues and PRs every once in a while to accurately label, assign, and triage them.
+If you''d like to expedite triage, feel free to ping `ThePuzzlemaker`.
+
+Be aware that patches that are fixing whitespace, formatting, or cosmetics (excluding
+documentation changes) may not be accepted under most circumstances.
+
+Again, thank you for contributing to rgbCTF!
+
+- RGBsec (automated message)
+        pr-message: |
+Hey there! Thank you for submitting your first pull request to rgbCTF!
+
+**If this is a security vulnerability in rgbCTF, ping `chop0`, `ThePuzzlemaker`, or `pepsipu` immediately,
+and the issue will be deleted for security. Then, [send the details to us at rgbsec@rgbsec.xyz](mailto:rgbsec@rgbsec.xyz).**
+
+If you haven''t already, you may want to take a look at our [contribution guide](https://github.com/RGBsec/rgbctf-backend/blog/master/CONTRIBUTING.md)
+
+We check issues and PRs every once in a while to accurately label, assign, and triage them.
+If you''d like to expedite triage, feel free to ping `ThePuzzlemaker`.
+
+Be aware that patches that are fixing whitespace, formatting, or cosmetics (excluding
+documentation changes) may not be accepted under most circumstances.
+
+Again, thank you for contributing to rgbCTF!
+
+- RGBsec (automated message)
