@@ -1,7 +1,6 @@
 const express = require('express');
 const debug = require('debug')('rgbctf-backend');
 const Team = require('../../models/team');
-const User = require('../../models/user');
 
 const router = express.Router();
 
