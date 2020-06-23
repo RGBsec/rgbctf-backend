@@ -33,7 +33,8 @@ mongoose
     debug(`mongoDB connected to on port ${r.connection.port}`);
   })
   .catch((e) => {
-    debug(`err connecting to mongodb: ${e}`);
+    console.error(`Error connecting to mongodb: ${e.message}`);
+    process.exit(-1);
   });
 
 app.use(helmet());
