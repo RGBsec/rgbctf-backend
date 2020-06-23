@@ -56,9 +56,9 @@ router.post('/', (req, res) => {
     });
   };
   if (email == null) {
-    User.findOne({ name }, 'hash salt', handler);
+    User.findOne({ name }, 'hash', handler);
   } else {
-    User.findOne({ email }, 'hash salt', handler);
+    User.findOne({ email }, 'hash', handler);
   }
 });
 
