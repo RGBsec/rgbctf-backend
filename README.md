@@ -26,13 +26,13 @@
 
 ## Prerequisites
 
-- npm >=6.14.4
+- yarn >=1.22.0
 - node >=10.20.1
 
 ## Install
 
 ```sh
-npm install
+yarn install
 ```
 
 ## Usage
@@ -48,7 +48,7 @@ Create a `.env` file in the local directory with these values:
 Then, to start the application, run:
 
 ```sh
-npm run start
+yarn start
 ```
 
 ## Author
