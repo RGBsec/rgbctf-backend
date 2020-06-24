@@ -1,4 +1,5 @@
 dependencies: package.json
 
 documentation:
-- /**/*.md
+- '**/*.md'
+- '*.md'
