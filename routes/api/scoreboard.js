@@ -1,6 +1,7 @@
 const express = require('express');
 const debug = require('debug')('rgbctf-backend');
 const Team = require('../../models/team');
+const Challenge = require('../../models/challenge');
 
 const router = express.Router();
 
@@ -13,16 +14,28 @@ router.get('/:index', (req, res) => {
   }
   Team.find({}, 'name points', {
     skip: index,
-    limit: index + 20,
     sort: {
       points: 1,
     },
   }, (e, teams) => {
     if (e) {
-      debug(`login/user: err: ${e}`);
+      debug(`scoreboard/team: err: ${e}`);
       res.send({ success: false, err: 'internal error' });
     } else {
-      res.send({ success: true, teams: teams.map(({ name, points }) => ({ name, points })) });
+      const total = teams.length();
+      Challenge.find({}, 'points', (challE, challs) => {
+        if (challE) {
+          debug(`scoreboard/chall: err: ${challE}`);
+          res.send({ success: false, err: 'internal error' });
+          return;
+        }
+        res.send({
+          success: true,
+          total,
+          maxPoints: challs.map(({ points }) => points).reduce((prev, curr) => prev + curr, 0),
+          teams: teams.map(({ name, points }) => ({ name, points })),
+        });
+      });
     }
     res.end();
   });
