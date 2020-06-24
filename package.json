@@ -31,6 +31,7 @@
         "express": "~4.17.1",
         "express-session": "^1.17.1",
         "helmet": "^3.23.1",
+        "http-errors": "^1.7.3",
         "mongoose": "^5.9.20",
         "morgan": "~1.10.0"
     },
