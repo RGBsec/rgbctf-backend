@@ -33,7 +33,7 @@ mongoose
     debug(`mongoDB connected to on port ${r.connection.port}`);
   })
   .catch((e) => {
-    console.error(`Error connecting to mongodb: ${e.message}`);
+    debug(`Error connecting to mongodb: ${e.message}`);
     process.exit(-1);
   });
 
@@ -73,6 +73,25 @@ const getRoutes = (dir) => {
   });
 };
 getRoutes('routes');
+// eslint-disable-next-line consistent-return
+app.use((err, req, res, next) => {
+  // No routes handled the request and no system error, that means 404 issue.
+  // Forward to next middleware to handle it.
+  // TODO: 404 middleware
+  if (!err) return next();
+
+  if (req.url.startsWith('/api')) res.locals.success = false;
+  // set locals, only providing stack trace in development
+  res.locals.message = err.message;
+  res.locals.error = process.env.DEBUG ? err.stack : {};
+
+  res.status(err.status || 500);
+  res.json({ success: false, err: err.message });
+
+  // render the error page
+
+  res.end();
+});
 
 const server = app.listen(app.get('port'), () => {
   debug(`express started on ${server.address().port}`);
