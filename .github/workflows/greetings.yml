@@ -12,7 +12,7 @@ jobs:
         issue-message: |
                       Hey there! Thank you for submitting your first issue to rgbCTF!
 
-                      **If this is a security vulnerability in rgbCTF, ping `chop0`, `ThePuzzlemaker`, or `pepsipu` immediately,
+                      **If this is a security vulnerability in rgbCTF, ping `chop0` or `pepsipu` immediately,
                       and the issue will be deleted for security. Then, [send the details to us at platform@rgbsec.xyz](mailto:platform@rgbsec.xyz).**
 
                       If you haven't already, you may want to take a look at our [contribution guide](https://github.com/RGBsec/rgbctf-backend/blog/master/CONTRIBUTING.md)
@@ -29,7 +29,7 @@ jobs:
         pr-message: |
                   Hey there! Thank you for submitting your first pull request to rgbCTF!
 
-                  **If this is a security vulnerability in rgbCTF, ping `chop0`, `ThePuzzlemaker`, or `pepsipu` immediately,
+                  **If this is a security vulnerability in rgbCTF, ping `chop0` or `pepsipu` immediately,
                   and the issue will be deleted for security. Then, [send the details to us at platform@rgbsec.xyz](mailto:platform@rgbsec.xyz).**
 
                   If you haven't already, you may want to take a look at our [contribution guide](https://github.com/RGBsec/rgbctf-backend/blog/master/CONTRIBUTING.md)
