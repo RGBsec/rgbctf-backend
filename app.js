@@ -33,8 +33,7 @@ mongoose
     debug(`mongoDB connected to on port ${r.connection.port}`);
   })
   .catch((e) => {
-    // eslint-disable-next-line no-console
-    console.error(`Error connecting to mongodb: ${e.message}`);
+    debug(`Error connecting to mongodb: ${e.message}`);
     process.exit(-1);
   });
 
