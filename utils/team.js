@@ -7,7 +7,7 @@ const User = require('../models/user');
 const register = (name, inviteCode, userId, next, callback) => {
   Team.exists({ name }).then((exists) => {
     if (exists) {
-      next(createError(403, 'Team Exists'));
+      next(createError(422, 'Team Exists'));
     } else {
       const team = new Team({
         name,
@@ -41,7 +41,7 @@ const register = (name, inviteCode, userId, next, callback) => {
 const join = (name, inviteCode, userId, next, callback) => {
   User.findById(userId, 'teamId').then((user) => {
     if (user.teamId !== null) {
-      next(createError(403, 'Already On Team'));
+      next(createError(422, 'Already On Team'));
       return;
     }
     Team.findOne({ name }, 'inviteCode', (teamE, team) => {
