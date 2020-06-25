@@ -12,7 +12,7 @@ const requestSchema = Joi.object({
   inviteCode: Joi.string().required(),
 });
 
-router.post('/', middleware.checkToken, (req, res) => {
+router.post('/', middleware.checkToken, (req, res, next) => {
   if (req.session.userId === null) {
     res.send({ success: false, err: 'not logged in' });
     res.end();
@@ -28,7 +28,7 @@ router.post('/', middleware.checkToken, (req, res) => {
 
   // This code was abstracted to /utils/team.js to allow for simpler code
   // when joining a team on registration.
-  team.join(name, inviteCode, req.session.userId, (response) => {
+  team.join(name, inviteCode, req.session.userId, next, (response) => {
     res.send(response);
     res.end();
   });

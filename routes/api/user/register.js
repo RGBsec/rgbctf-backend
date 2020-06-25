@@ -61,6 +61,7 @@ router.post('/', (req, res, next) => {
           res.cookie('session', token, {
             expires: new Date(Date.now() + 900000),
             httpOnly: true,
+
           });
 
           // Create team here, if requested.

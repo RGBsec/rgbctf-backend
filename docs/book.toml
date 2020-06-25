@@ -1,0 +1,25 @@
+[book]
+authors = ["RGBsec", "rgbCTF Backend Contributors"]
+language = "en"
+multilingual = false
+src = "src"
+title = "rgbCTF Backend Documentation"
+description = "Documentation for RGBsec/rgbctf-backend"
+
+[build]
+create-missing = true
+
+[output.html]
+default-theme = "coal"
+curly-quotes = true
+git-repository-url = "https://github.com/RGBsec/rgbctf-backend"
+
+[output.html.fold]
+enable = true
+level = 2
+
+[output.html.search]
+use-boolean-and = true
+boost-hierarchy = 2
+expand = true
+heading-split-level = 2
