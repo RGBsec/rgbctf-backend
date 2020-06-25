@@ -88,8 +88,8 @@ router.post('/', (req, res, next) => {
                 res.send({ success: true, msg: 'registered' });
                 res.end();
               };
-              if (createTeam) team.register(teamName, inviteCode, req.session.userId, handler);
-              else team.join(teamName, inviteCode, req.session.userId, handler);
+              if (createTeam) team.register(teamName, inviteCode, req.session.userId, next, handler);
+              else team.join(teamName, inviteCode, req.session.userId, next, handler);
               return;
             }
             // TODO: When sending confirmation WITHOUT creation of a team,
