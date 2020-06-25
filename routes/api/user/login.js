@@ -4,7 +4,6 @@ const Joi = require('@hapi/joi');
 const createError = require('http-errors');
 const User = require('../../../models/user');
 const crypto = require('../../../utils/crypto');
-const { create } = require('../../../models/user');
 
 const router = express.Router();
 
