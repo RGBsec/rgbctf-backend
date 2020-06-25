@@ -42,22 +42,22 @@ As there are only 50 teams, only 50 will be returned:
 
 ```json
 {
-    success: true,
-    totalTeams: 50,
-    maxPoints: 100,
-    teams: [
+    "success": true,
+    "totalTeams": 50,
+    "maxPoints": 100,
+    "teams": [
         {
-            name: "debug0",
-            points: 0
+            "name": "debug0",
+            "points": 0
         },
         {
-            name: "debug1",
-            points: 0
+            "name": "debug1",
+            "points": 0
         },
         // ... //
         {
-            name: "debug49",
-            points: 0
+            "name": "debug49",
+            "points": 0
         }
     ]
 }
@@ -73,22 +73,22 @@ As there are only 35 teams left (`50 - 15`), only those teams will be returned:
 
 ```json
 {
-    success: true,
-    totalTeams: 35,
-    maxPoints: 100,
-    teams: [
+    "success": true,
+    "totalTeams": 35,
+    "maxPoints": 100,
+    "teams": [
         {
-            name: "debug15",
-            points: 0
+            "name": "debug15",
+            "points": 0
         },
         {
-            name: "debug16",
-            points: 0
+            "name": "debug16",
+            "points": 0
         },
         // ... //
         {
-            name: "debug49",
-            points: 0
+            "name": "debug49",
+            "points": 0
         }
     ]
 }

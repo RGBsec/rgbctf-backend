@@ -30,16 +30,38 @@ The following errors can be returned:
 
 ## Examples
 
-Some example relevant to the endpoint if relevant
+The following request will register a team `RGBsec` with invite code `example`:
+
+```http
+POST /api/team/create
+
+Content-Type: application/json
+
+{"name": "RGBsec", "inviteCode": "example"}
+```
+
+If it worked, the response would be something similar to the following:
+
+```json
+{
+    "success": true,
+    "msg": "team created"
+}
+```
+
+
 
 ## Pseudocode
 
 ```js
-let { param } = request;
-respond({
-  some: "pseudocode",
-  that: "mirrors roughly",
-  how: "the endpoint",
-  works: "(simplified)"
-})
+let { name, inviteCode } = request;
+Team.create({
+    name,
+    inviteCode
+}).ok(() => {
+   respond({
+       success: true,
+       msg: "team created"
+   }) 
+});
 ```

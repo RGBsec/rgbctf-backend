@@ -14,6 +14,8 @@ All errors will return an object with the following fields:
 
 These following errors are common to almost all possible requests:
 
+- **`400 [JSON Error]`:** The JSON input provided was syntactically invalid.
+
 - **`400 Request Aborted`:** The request was aborted by the client before the body has been fully received.
 - **`413 Request Entity Too Large`:** The request body's size is larger than 100 kilobytes.
 - **`400 Request Size did not Match Content Length`:** The `Content-Length` header did not match the size of the request.
