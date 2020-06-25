@@ -1,6 +1,7 @@
 const express = require('express');
 const Joi = require('@hapi/joi');
 const team = require('../../../utils/team');
+const middleware = require('../../../utils/middleware');
 
 const router = express.Router();
 
@@ -11,7 +12,7 @@ const requestSchema = Joi.object({
   inviteCode: Joi.string().required(),
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', middleware.checkToken, (req, res, next) => {
   if (req.session.userId === null) {
     res.send({ success: false, err: 'not logged in' });
     res.end();

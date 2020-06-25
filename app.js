@@ -37,23 +37,13 @@ mongoose
     process.exit(-1);
   });
 
+app.use(cookieParser());
 app.use(helmet());
 app.use(logger('dev'));
 app.use(express.json({ strict: true }));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(
-  session({
-    secret: process.env.COOKIESECRET,
-    saveUninitialized: false,
-    unset: 'destroy',
-    name: 'rgbctf_session_id',
-    resave: false,
-    store: new MongoStore({
-      mongooseConnection: mongoose.connection,
-    }),
-  }),
-);
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('port', process.env.PORT || 3000);
