@@ -2,7 +2,7 @@
 
 #### **Did you find a bug?**
 
-* **Do not open up a GitHub issue if the bug is a security vulnerability in rgbCTF**. Instead [email the details to us at rgbsec@rgbsec.xyz](mailto:rgbsec@rgbsec.xyz).
+* **Do not open up a GitHub issue if the bug is a security vulnerability in rgbCTF**. Instead [email the details to us at platform@rgbsec.xyz](mailto:platform@rgbsec.xyz).
 
 * **Ensure the bug was not already reported** by searching on GitHub under [Issues](https://github.com/RGBsec/rgbctf-backend/issues).
 

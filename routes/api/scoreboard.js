@@ -1,5 +1,6 @@
 const express = require('express');
 const debug = require('debug')('rgbctf-backend');
+const createError = require('http-errors');
 const Team = require('../../models/team');
 const Challenge = require('../../models/challenge');
 const createError = require('http-errors');
@@ -11,6 +12,7 @@ router.get('/:index', (req, res, next) => {
   if (index === undefined || Number.isNaN(index) || index === Infinity) {
     next(createError(404, 'Bad Index')); return;
   }
+
   Team.find({}, 'name points', {
     skip: index,
     limit: 100,
@@ -36,6 +38,7 @@ router.get('/:index', (req, res, next) => {
         res.end();
       });
     }
+
   });
 });
 

@@ -1,8 +1,10 @@
 const express = require('express');
 const debug = require('debug')('rgbctf-backend');
 const Joi = require('@hapi/joi');
+const createError = require('http-errors');
 const User = require('../../../models/user');
 const crypto = require('../../../utils/crypto');
+const { create } = require('../../../models/user');
 
 const router = express.Router();
 
@@ -22,25 +24,21 @@ const requestSchema = Joi.alternatives().try(
   }),
 );
 
-
-router.post('/', (req, res) => {
+router.post('/', (req, res, next) => {
   const validatedBody = requestSchema.validate(req.body);
   if (validatedBody.error) {
-    res.send({ success: false, err: 'invalid payload' });
-    res.end();
+    next(createError(400, 'Invalid Payload'));
     return;
   }
   const { name, email, password } = validatedBody.value;
   const handler = (e, user) => {
     if (e) {
       debug(`login/user: err: ${e}`);
-      res.send({ success: false, err: 'internal error' });
-      res.end();
+      next(createError(500, 'Internal Error'));
       return;
     }
     if (user === null) {
-      res.send({ success: false, err: 'username or email does not exist' });
-      res.end();
+      next(createError(403, 'Invalid Login'));
       return;
     }
     crypto.checkPassword(password, user.hash).then((success) => {
@@ -50,8 +48,7 @@ router.post('/', (req, res) => {
         res.send({ success: true, msg: 'logged in' });
         res.end();
       } else {
-        res.send({ success: false, err: 'wrong password' });
-        res.end();
+        next(createError(403, 'Invalid Login'));
       }
     });
   };
@@ -61,6 +58,5 @@ router.post('/', (req, res) => {
     User.findOne({ email }, 'hash', handler);
   }
 });
-
 
 module.exports = router;

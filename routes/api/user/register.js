@@ -1,6 +1,7 @@
 const express = require('express');
 const debug = require('debug')('rgbctf-backend');
 const Joi = require('@hapi/joi');
+const createError = require('http-errors');
 const config = require('../../../config');
 const User = require('../../../models/user');
 const crypto = require('../../../utils/crypto');
@@ -26,25 +27,20 @@ const requestSchema = Joi.alternatives().try(
 );
 
 
-router.post('/', (req, res) => {
+router.post('/', (req, res, next) => {
   const validatedBody = requestSchema.validate(req.body);
   if (validatedBody.error) {
     debug(`register/user: invalid payload: ${JSON.stringify(req.body)}`);
-    res.send({ success: false, err: 'invalid payload' });
-    res.end();
-    return;
+    next(createError(400, 'Invalid Payload')); return;
   }
   const { name, email, password } = validatedBody.value;
   User.exists({ $or: [{ email }, { name }] }, (e, exists) => {
     if (e) {
       debug(`register/user: err: ${e}`);
-      res.send({ success: false, err: 'internal error' });
-      res.end();
-      return;
+      next(createError(500, 'Internal Error')); return;
     }
     if (exists) {
-      res.send({ success: false, err: 'username or email exists' });
-      res.end();
+      next(createError(422, 'Username or email already exists'));
     } else {
       crypto
         .hashPassword(password, config.bcryptCost)
@@ -61,9 +57,7 @@ router.post('/', (req, res) => {
           user.save((saveE, savedUser) => {
             if (saveE) {
               debug(`register/user: err: ${saveE}`);
-              res.send({ success: false, err: 'internal error' });
-              res.end();
-              return;
+              next(createError(500, 'Internal Error')); return;
             }
             // eslint-disable-next-line no-underscore-dangle
             req.session.userId = savedUser._id;
@@ -81,8 +75,7 @@ router.post('/', (req, res) => {
                   User.deleteOne({ _id: req.session.userId }, (deleteE) => {
                     if (e) {
                       debug(`register/user teamerr/delete: err: ${deleteE}`);
-                      res.send({ success: false, msg: 'internal error' });
-                      return;
+                      next(createError(500, 'Internal Error')); return;
                     }
                     delete req.session;
                     res.send(response);
