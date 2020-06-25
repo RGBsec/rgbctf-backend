@@ -2,9 +2,10 @@ const express = require('express');
 const debug = require('debug')('rgbctf-backend');
 const Joi = require('@hapi/joi');
 const createError = require('http-errors');
+const jwt = require('jsonwebtoken');
+const ejwt = require('express-jwt');
 const User = require('../../../models/user');
 const crypto = require('../../../utils/crypto');
-const { create } = require('../../../models/user');
 
 const router = express.Router();
 
@@ -43,8 +44,13 @@ router.post('/', (req, res, next) => {
     }
     crypto.checkPassword(password, user.hash).then((success) => {
       if (success) {
-        // eslint-disable-next-line no-underscore-dangle
-        req.session.userId = user._id;
+        const token = jwt.sign({ user: user.name }, process.env.SECRET, {
+          expiresIn: '24h',
+        });
+        res.cookie('session', token, {
+          expires: new Date(Date.now() + 900000),
+          httpOnly: true,
+        });
         res.send({ success: true, msg: 'logged in' });
         res.end();
       } else {

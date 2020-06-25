@@ -5,7 +5,6 @@ const team = require('../../../utils/team');
 
 const router = express.Router();
 
-
 // When changing the request schema here, be sure to update it in /routes/api/user/register.js
 // and update the associated methods in /utils/team.js
 const requestSchema = Joi.object({
