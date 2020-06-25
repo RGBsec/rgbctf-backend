@@ -16,13 +16,14 @@ Short description.
 
 **Fields**:
 
-- **`field`:** Some fiel
+- **`success`:** Always `true` if there are no [errors](#errors)
+- **`field`:** Some field
 
 ## Errors
 
 The following errors can be returned:
 
-- **`500 Internal Error`:** A server error has occured
+- **`123 Some Error`:** Some Error
 
 ## Examples
 

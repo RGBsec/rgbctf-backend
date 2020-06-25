@@ -26,8 +26,7 @@ Get top teams starting with an index.
 
 The following errors can be returned:
 
-- **`404 Bad Index`:** The index provided is invalid (it is either a negative number, not provided, or not a number)
-- **`500 Internal Error`:** A server error has occured
+- **`404 Bad Index`:** The index provided is invalid (it is either a negative number, not provided, or not a number).
 
 ## Examples
 

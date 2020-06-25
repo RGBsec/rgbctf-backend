@@ -11,18 +11,22 @@ Create a team. **Requires authentication.**
 **POST Data (JSON):**
 
 - **`name`:** The team name to register
+- **`inviteCode`:** The invite code to use
 
 ## Response
 
 **Fields**:
 
-- **`field`:** Some fiel
+- **`success`:** Always `true` if there are no [errors](#errors)
+- **`msg`:** Always `team created` if there are no [errors](#errors)
 
 ## Errors
 
 The following errors can be returned:
 
-- **`500 Internal Error`:** A server error has occured
+- **`400 Invalid Payload`:** The request is invalid.
+- **`403 Unauthorized`:** Not logged in.
+- **`422 Team Exists`:** A team with the name already exists.
 
 ## Examples
 
