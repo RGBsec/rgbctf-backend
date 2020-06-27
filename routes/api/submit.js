@@ -1,4 +1,4 @@
-const express = require('express');
+express = require('express');
 
 const createError = require('http-errors');
 const { valid } = require('@hapi/joi');
@@ -13,9 +13,7 @@ const router = express.Router();
 const requestSchema = Joi.alternatives().try(
   Joi.object({
     name: Joi.string().required(),
-    description: Joi.string().required(),
-    hints: Joi.array().required(),
-    points: Joi.number(),
+    flag: Joi.string().required(),
   }),
 );
 router.post('/', middleware.checkToken, (req, res, next) => {
@@ -23,24 +21,23 @@ router.post('/', middleware.checkToken, (req, res, next) => {
   if (validatedBody.error) {
     next(createError(400, 'Invalid Payload'));
     return;
-  } if (!req.user.admin) {
-    next(createError(403, 'Unauthorized'));
-    return;
   }
   const {
-    name, description, hints, flagCaseSensitive, points,
+    name, flag,
   } = validatedBody.value;
 
-  console.log(validatedBody);
-  const challenge = new Challenge({
-    name, description, hints, flagCaseSensitive, points,
+  Challenge.findOne({ name }, 'name flag', (err1, chall) => {
+    if (chall.flag === flag) {
+      req.team.solves.push(chall.name); res.json({
+        success: true,
+        message: 'Correct Flag',
+      });
+      req.team.save();
+      res.end();
+    } else {
+      next(createError(403, 'Wrong Flag'));
+    }
   });
-  challenge.save();
-  res.json({
-    success: true,
-    message: 'Added challenge',
-  });
-  res.end();
 });
 
 module.exports = router;
