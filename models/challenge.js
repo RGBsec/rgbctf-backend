@@ -2,9 +2,8 @@ const mongoose = require('mongoose');
 
 const Challenge = new mongoose.Schema({
   name: String,
-  description: [String],
+  description: String,
   hints: [String],
-  staticScoring: Boolean,
   flagCaseSensitive: Boolean,
   points: Number,
 });

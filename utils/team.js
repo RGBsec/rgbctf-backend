@@ -14,6 +14,7 @@ const register = (name, inviteCode, userId, next, callback) => {
         inviteCode,
         members: [userId],
         points: 0,
+        solves: [],
       });
       team.save((saveE, savedTeam) => {
         if (saveE) {

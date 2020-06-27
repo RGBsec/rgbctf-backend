@@ -6,6 +6,7 @@ const User = new mongoose.Schema({
   teamId: String,
   email: String,
   confirmedEmail: Boolean,
+  admin: Boolean,
 });
 
 module.exports = mongoose.model('user', User);
