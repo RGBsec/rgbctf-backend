@@ -5,6 +5,7 @@ const Team = new mongoose.Schema({
   inviteCode: String,
   members: [String],
   points: Number,
+  solves: [String],
 });
 
 module.exports = mongoose.model('Team', Team);

@@ -3,11 +3,12 @@ const debug = require('debug')('rgbctf-backend');
 const createError = require('http-errors');
 const Team = require('../../models/team');
 const Challenge = require('../../models/challenge');
-const createError = require('http-errors');
+
+const middleware = require('../../utils/middleware');
 
 const router = express.Router();
 
-router.get('/:index', (req, res, next) => {
+router.get('/:index', middleware.checkToken, (req, res, next) => {
   const index = +req.params.index;
   if (index === undefined || Number.isNaN(index) || index === Infinity) {
     next(createError(404, 'Bad Index')); return;
@@ -38,7 +39,6 @@ router.get('/:index', (req, res, next) => {
         res.end();
       });
     }
-
   });
 });
 

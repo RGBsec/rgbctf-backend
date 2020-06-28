@@ -52,6 +52,7 @@ router.post('/', (req, res, next) => {
             teamId: null,
             confirmedEmail: false,
           });
+          user.save();
           // TODO: We need to confirm emails somehow and add more checks for
           // email validation for some other things, where deemed necessary.
 
@@ -64,7 +65,7 @@ router.post('/', (req, res, next) => {
 
           });
 
-          // Create team here, if requested.
+          // Create team here, if requested.f
           if (validatedBody.value.teamName != null) {
             const { teamName, inviteCode, createTeam } = validatedBody.value;
             const handler = (response) => {
@@ -85,8 +86,8 @@ router.post('/', (req, res, next) => {
               res.send({ success: true, msg: 'registered' });
               res.end();
             };
-            if (createTeam) team.register(teamName, inviteCode, req.session.userId, handler);
-            else team.join(teamName, inviteCode, req.session.userId, handler);
+            if (createTeam) team.register(teamName, inviteCode, user._id, next, handler);
+            else team.join(teamName, inviteCode, user._id, next, handler);
             return;
           }
           // TODO: When sending confirmation WITHOUT creation of a team,

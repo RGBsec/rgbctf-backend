@@ -73,8 +73,8 @@ app.use((err, req, res, next) => {
   if (req.url.startsWith('/api')) res.locals.success = false;
   // set locals, only providing stack trace in development
   res.locals.message = err.message;
-  res.locals.error = process.env.DEBUG ? err.stack : {};
-
+  res.locals.error = err.stack;
+  console.log(res.locals.error);
   res.status(err.status || 500);
   res.json({ success: false, err: err.message });
 

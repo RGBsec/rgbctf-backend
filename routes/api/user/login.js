@@ -44,7 +44,7 @@ router.post('/', (req, res, next) => {
     }
     crypto.checkPassword(password, user.hash).then((success) => {
       if (success) {
-        const token = jwt.sign({ user: user.name }, process.env.SECRET, {
+        const token = jwt.sign({ user: name }, process.env.SECRET, {
           expiresIn: '24h',
         });
         res.cookie('session', token, {
