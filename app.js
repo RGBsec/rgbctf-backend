@@ -42,11 +42,11 @@ app.use(helmet());
 app.use(logger('dev'));
 app.use(express.json({ strict: true }));
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('port', process.env.PORT || 3000);
+app.use(cookieParser());
 
 const getRoutes = (dir) => {
   fs.readdirSync(dir).forEach((p) => {

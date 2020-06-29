@@ -7,6 +7,7 @@ const Challenge = new mongoose.Schema({
   flagCaseSensitive: Boolean,
   points: Number,
   flag: String,
+  category: String,
 });
 
 module.exports = mongoose.model('challenge', Challenge);
