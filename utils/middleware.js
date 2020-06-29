@@ -3,10 +3,10 @@ const User = require('../models/user');
 const Team = require('../models/team');
 
 const checkToken = (req, res, next) => {
-  const { token } = req.cookies; // Express headers are auto converted to lowercase
-
-  if (token) {
-    jwt.verify(token, process.env.COOKIESECRET, (err, decoded) => {
+  const { session } = req.cookies; // Express headers are auto converted to lowercase
+  console.log(req.cookies);
+  if (session) {
+    jwt.verify(session, process.env.COOKIESECRET, (err, decoded) => {
       if (err) {
         return res.json({
           success: false,

@@ -17,6 +17,7 @@ router.get('/', middleware.checkToken, (req, res, next) => {
       hints: challenge.hints,
       points: challenge.points,
       solved: req.team.solves.includes(challenge.name),
+      category: challenge.category,
     }));
     res.json(challenges);
     res.end();
