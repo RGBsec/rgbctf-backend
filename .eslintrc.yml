@@ -1,2 +1,16 @@
 extends:
   - "airbnb"
+
+rules:
+  no-unused-vars:
+    - error
+    - args: after-used
+      varsIgnorePattern: "^_"
+  no-underscore-dangle:
+    - error
+    - allow:
+      - "_id"
+      - "_"
+      - "__"
+      - "___"
+      - "____"
