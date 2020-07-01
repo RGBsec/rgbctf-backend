@@ -5,31 +5,39 @@ const sessions = require('./sessions');
 const User = require('../models/user');
 const Team = require('../models/team');
 
-const checkToken = (req, res, next) => {
-  const { session } = req.cookies; // Express headers are auto converted to lowercase
-  console.log(req.cookies);
-  if (session) {
-    jwt.verify(session, process.env.COOKIESECRET, (err, decoded) => {
-      if (err) {
-        return res.json({
-          success: false,
-          message: 'Token is not valid',
-        });
+const resolveUserAndTeam = (req, res, next) => {
+  if (req.session.uid) {
+    User.findById(req.session.uid, (userE, user) => {
+      if (userE) {
+        debug(`resolve/user: err: ${userE.message}`);
+        next(createError(500, 'Internal Error'));
+        return;
       }
-      req.decoded = decoded;
-      User.findOne({ name: req.decoded.user }, 'name admin teamId', (err1, user) => {
-        req.user = user;
-        Team.findById(req.user.teamId, (err1, team) => {
+      if (!user) {
+        next(createError(404, 'User Not Found'));
+        return;
+      }
+      req.user = user;
+      if (req.user.teamId) {
+        Team.findById(req.user.teamId, (teamE, team) => {
+          if (teamE) {
+            debug(`resolve/team: err: ${teamE.message}`);
+            next(createError(500, 'Internal Error'));
+            return;
+          }
+          if (!team) {
+            next(createError(404, 'Team Not Found'));
+            return;
+          }
           req.team = team;
           next();
         });
-      });
+      } else {
+        next();
+      }
     });
   } else {
-    return res.json({
-      success: false,
-      message: 'Auth token is not supplied',
-    });
+    next();
   }
 };
 
@@ -140,8 +148,8 @@ const sessid = (req, res, next) => {
 };
 
 module.exports = {
-  checkToken,
   session,
   sessid,
   revoke,
+  resolveUserAndTeam,
 };

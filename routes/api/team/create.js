@@ -19,14 +19,14 @@ router.post('/', (req, res, next) => {
   }
   const { name, inviteCode } = validatedBody.value;
 
-  if (req.session.userId == null) {
+  if (!req.session.uid) {
     next(createError(403, 'Unauthorized')); return;
   }
 
   // This code was abstracted to /utils/team.js to allow for simpler code
   // when making a team on registration.
   team.register(name, inviteCode, req.session.userId, next, (response) => {
-    res.send(response);
+    res.json(response);
     res.end();
   });
 });

@@ -10,9 +10,6 @@ Informal JWT Schema:
   "exp": "<36 hours from now>",
   "iat": "<now>",
   "uid": "<user ID>",
-  "tid": "<team ID>"
-  "email_confirmed": <is email confirmed, for future use>,
-  "admin": <is admin>
 }
 */
 
@@ -36,6 +33,7 @@ const revokeSession = (req, id, next) => {
       debug(`session/revoke: err: ${err.message}`);
       next(createError(500, 'Internal Error'));
     }
+    next();
   });
 };
 

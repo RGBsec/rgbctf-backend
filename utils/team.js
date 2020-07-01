@@ -21,7 +21,6 @@ const register = (name, inviteCode, userId, next, callback) => {
           debug(`create/team: err: ${saveE}`);
           next(createError(500, 'Internal Error')); return;
         }
-        // eslint-disable-next-line no-underscore-dangle
         User.findByIdAndUpdate(userId, { teamId: savedTeam._id }, (updateE) => {
           if (updateE) {
             debug(`create/team: err: ${saveE}`);
@@ -50,7 +49,6 @@ const join = (name, inviteCode, userId, next, callback) => {
         debug(`join/team: err: ${teamE}`);
         next(createError(500, 'Internal Error'));
       } else if (team.inviteCode === inviteCode) {
-        // eslint-disable-next-line no-underscore-dangle
         Team.findByIdAndUpdate(team._id, {
           $push: {
             members: userId,
@@ -60,7 +58,6 @@ const join = (name, inviteCode, userId, next, callback) => {
             debug(`join/team: err: ${updateE}`);
             next(createError(500, 'Internal Error'));
           } else {
-            // eslint-disable-next-line no-underscore-dangle
             User.findByIdAndUpdate(userId, { teamId: team._id }, (userUpdateE) => {
               if (userUpdateE) {
                 debug(`join/team: err: ${userUpdateE}`);

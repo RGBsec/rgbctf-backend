@@ -72,6 +72,7 @@ app.use(ejwt({
 app.use(middleware.revoke);
 app.use(middleware.sessid);
 app.use(middleware.session);
+app.use(middleware.resolveUserAndTeam);
 
 const getRoutes = (dir) => {
   fs.readdirSync(dir).forEach((p) => {
