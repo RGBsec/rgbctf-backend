@@ -59,6 +59,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('port', process.env.PORT || 3000);
+// We're doing API stuff so we don't want caching, as it messes up a bit of stuff.
+app.disable('etag');
 app.use(ejwt({
   secret: process.env.COOKIESECRET,
   algorithms: ['HS256'],
@@ -67,6 +69,7 @@ app.use(ejwt({
   credentialsRequired: false,
   getToken: sessions.getSession,
 }));
+app.use(middleware.revoke);
 app.use(middleware.sessid);
 app.use(middleware.session);
 

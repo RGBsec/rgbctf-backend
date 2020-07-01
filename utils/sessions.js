@@ -8,6 +8,7 @@ Informal JWT Schema:
 {
   "jti": "<48 bit random number value>",
   "exp": "<36 hours from now>",
+  "iat": "<now>",
   "uid": "<user ID>",
   "tid": "<team ID>"
   "email_confirmed": <is email confirmed, for future use>,

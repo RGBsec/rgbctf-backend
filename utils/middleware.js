@@ -33,6 +33,26 @@ const checkToken = (req, res, next) => {
   }
 };
 
+const revoke = (req, res, next) => {
+  if (!req.session) req.session = {};
+  if (req.session.jti) {
+    sessions.isSessionRevoked(req, (err, revoked) => {
+      if (err) {
+        debug(`jwt/check valid: err: ${err.message}`);
+        next(createError(500, 'Internal Error'));
+        return;
+      }
+      if (revoked) {
+        delete req.session.jti;
+        res.clearCookie('session');
+      }
+      next();
+    });
+  } else {
+    next();
+  }
+};
+
 const session = (req, res, next) => {
   const handler = {
     set: (target, property, value) => {
@@ -67,9 +87,7 @@ const session = (req, res, next) => {
     if (req.session.jti) {
       sessions.revokeSession(req, req.session.jti, next2);
       res.clearCookie('session');
-      return true;
     }
-    return false;
   };
   next();
 };
@@ -111,15 +129,19 @@ const sessid = (req, res, next) => {
         } catch (err3) {
           debug(`jwt/sign+cookie: err: ${err3.message}`);
           next(createError(500, 'Internal Error'));
+          return;
         }
+        next();
       });
     });
+  } else {
+    next();
   }
-  next();
 };
 
 module.exports = {
   checkToken,
   session,
   sessid,
+  revoke,
 };
