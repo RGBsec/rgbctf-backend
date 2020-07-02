@@ -199,6 +199,8 @@
 <li><code>COOKIESECRET</code>: Required. This is the secret used for <a href="https://www.npmjs.com/package/express-session">express-session</a>. This is used to sign the session ID cookie. It is recommended that this value is randomly generated.</li>
 <li><code>PORT</code>: Optional. This is the port used for this application. It defaults to <code>3000</code> if not specified.</li>
 <li><code>DEBUG</code>: Optional. Setting it to “rgbctf-backend” will cause debug messages to be logged.</li>
+<li><code>REDISPORT</code>: Optional. The port for the Redis instance. Defaults to <code>6379</code>.</li>
+<li><code>REDISHOST</code>: Optional. The host for the Redis instance. Defaults to <code>127.0.0.1</code>.</li>
 <li><code>ALLOWCORS</code>: Optional. If present with any non-empty string, CORS will be enabled with an origin of <code>http://localhost:3000</code>. This is mainly used for testing the frontend with the API.</li>
 </ul>
 <p>Then, to start the application, run:</p>
