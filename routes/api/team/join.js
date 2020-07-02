@@ -1,7 +1,7 @@
 const express = require('express');
 const Joi = require('@hapi/joi');
+const createError = require('http-errors');
 const team = require('../../../utils/team');
-const middleware = require('../../../utils/middleware');
 
 const router = express.Router();
 
@@ -12,24 +12,22 @@ const requestSchema = Joi.object({
   inviteCode: Joi.string().required(),
 });
 
-router.post('/', middleware.checkToken, (req, res, next) => {
-  if (req.session.userId === null) {
-    res.send({ success: false, err: 'not logged in' });
-    res.end();
-    return;
-  }
+router.post('/', (req, res, next) => {
   const validatedBody = requestSchema.validate(req.body);
   if (validatedBody.error) {
-    res.send({ success: false, err: 'invalid payload' });
-    res.end();
-    return;
+    next(createError(400, 'Invalid Payload')); return;
   }
   const { name, inviteCode } = validatedBody.value;
+
+  if (!req.session.uid) {
+    next(createError(403, 'Unauthorized'));
+    return;
+  }
 
   // This code was abstracted to /utils/team.js to allow for simpler code
   // when joining a team on registration.
   team.join(name, inviteCode, req.session.userId, next, (response) => {
-    res.send(response);
+    res.json(response);
     res.end();
   });
 });

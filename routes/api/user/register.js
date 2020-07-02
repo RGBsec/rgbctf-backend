@@ -2,7 +2,6 @@ const express = require('express');
 const debug = require('debug')('rgbctf-backend');
 const Joi = require('@hapi/joi');
 const createError = require('http-errors');
-const jwt = require('jsonwebtoken');
 const config = require('../../../config');
 const User = require('../../../models/user');
 const crypto = require('../../../utils/crypto');
@@ -30,7 +29,7 @@ const requestSchema = Joi.alternatives().try(
 router.post('/', (req, res, next) => {
   const validatedBody = requestSchema.validate(req.body);
   if (validatedBody.error) {
-    debug(`register/user: invalid payload: ${JSON.stringify(req.body)}`);
+    debug('register/user: invalid payload');
     next(createError(400, 'Invalid Payload')); return;
   }
   const { name, email, password } = validatedBody.value;
@@ -51,49 +50,63 @@ router.post('/', (req, res, next) => {
             hash: hashedPassword,
             teamId: null,
             confirmedEmail: false,
+            admin: false,
           });
-          user.save();
-          // TODO: We need to confirm emails somehow and add more checks for
-          // email validation for some other things, where deemed necessary.
+          user.save((saveE) => {
+            if (saveE) {
+              debug(`register/user: err: ${saveE.message}`);
+              next(createError(500, 'Internal Error'));
+              return;
+            }
+            // TODO: We need to confirm emails somehow and add more checks for
+            // email validation for some other things, where deemed necessary.
 
-          const token = jwt.sign({ user: user.name }, process.env.SECRET, {
-            expiresIn: '24h',
-          });
-          res.cookie('session', token, {
-            expires: new Date(Date.now() + 900000),
-            httpOnly: true,
+            req.session.uid = user._id;
 
-          });
+            // Create team here, if requested.
+            if (validatedBody.value.teamName != null) {
+              const { teamName, inviteCode, createTeam } = validatedBody.value;
+              const handler = (response) => {
+                if (!response.success) {
+                  // Delete user and invalidate session if team registration failed,
+                  // this is to avoid pain caused when registering a team and user
+                  // at the same time and one fails, making you have to go to a
+                  // separate place to register the team instead of just registering
+                  // them together again
+                  req.revoke((err) => {
+                    if (err) {
+                      debug(`register/user teamerr/revoke: err: ${err.message}`);
+                      next(createError(500, 'Internal Error'));
+                      return;
+                    }
 
-          // Create team here, if requested.f
-          if (validatedBody.value.teamName != null) {
-            const { teamName, inviteCode, createTeam } = validatedBody.value;
-            const handler = (response) => {
-              if (!response.success) {
-                // Delete user and invalidate session if team registration failed,
-                // this is to avoid pain caused when registering a team and user
-                // at the same time and one fails, making you have to go to a
-                // separate place to register the team instead of just registering
-                // them together again
-                delete req.cookies;
-                res.send(response);
+                    User.deleteOne({ _id: req.session.userId }, (deleteE) => {
+                      if (deleteE) {
+                        debug(`register/user teamerr/delete: err: ${deleteE.message}`);
+                        next(createError(500, 'Internal Error')); return;
+                      }
+                      res.json(response);
+                      res.end();
+                    });
+                  });
+
+                  return;
+                }
+
+                // TODO: When sending confirmation emails WITH creation of a team,
+                // do it here.
+                res.json({ success: true, msg: 'registered' });
                 res.end();
-
-                return;
-              }
-              // TODO: When sending confirmation emails WITH creation of a team,
-              // do it here.
-              res.send({ success: true, msg: 'registered' });
-              res.end();
-            };
-            if (createTeam) team.register(teamName, inviteCode, user._id, next, handler);
-            else team.join(teamName, inviteCode, user._id, next, handler);
-            return;
-          }
-          // TODO: When sending confirmation WITHOUT creation of a team,
-          // do it here.
-          res.send({ success: true, msg: 'registered' });
-          res.end();
+              };
+              if (createTeam) team.register(teamName, inviteCode, user._id, next, handler);
+              else team.join(teamName, inviteCode, user._id, next, handler);
+              return;
+            }
+            // TODO: When sending confirmation WITHOUT creation of a team,
+            // do it here.
+            res.json({ success: true, msg: 'registered' });
+            res.end();
+          });
         });
     }
   });

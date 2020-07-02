@@ -2,8 +2,6 @@ const express = require('express');
 const debug = require('debug')('rgbctf-backend');
 const Joi = require('@hapi/joi');
 const createError = require('http-errors');
-const jwt = require('jsonwebtoken');
-const ejwt = require('express-jwt');
 const User = require('../../../models/user');
 const crypto = require('../../../utils/crypto');
 
@@ -44,14 +42,8 @@ router.post('/', (req, res, next) => {
     }
     crypto.checkPassword(password, user.hash).then((success) => {
       if (success) {
-        const token = jwt.sign({ user: name }, process.env.SECRET, {
-          expiresIn: '24h',
-        });
-        res.cookie('session', token, {
-          expires: new Date(Date.now() + 900000),
-          httpOnly: true,
-        });
-        res.send({ success: true, msg: 'logged in' });
+        req.session.uid = user._id;
+        res.json({ success: true, msg: 'logged in' });
         res.end();
       } else {
         next(createError(403, 'Invalid Login'));
@@ -59,9 +51,9 @@ router.post('/', (req, res, next) => {
     });
   };
   if (email == null) {
-    User.findOne({ name }, 'hash', handler);
+    User.findOne({ name }, 'hash confirmedEmail admin', handler);
   } else {
-    User.findOne({ email }, 'hash', handler);
+    User.findOne({ email }, 'hash confirmedEmail admin', handler);
   }
 });
 
