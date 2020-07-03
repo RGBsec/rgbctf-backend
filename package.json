@@ -34,7 +34,7 @@
         "helmet": "^3.23.3",
         "http-errors": "^1.7.3",
         "jsonwebtoken": "^8.5.1",
-        "mongoose": "^5.9.20",
+        "mongoose": "^5.9.21",
         "morgan": "~1.10.0",
         "redis": "^3.0.2"
     },
