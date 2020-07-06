@@ -34,12 +34,12 @@ cookies = request.cookies
 
 for i in range(0, 500):
   payload2 = {
-	  'name': 'Debug Challenge #%s' % i,
-    'description': 'Debug Challenge #%s' % i,
+	  'name': 'Debug Challenge #%d' % i,
+    'description': 'Debug Challenge #%d' % i,
     'category': 'Debug',
-    'hints': ['Flag is rgbCTF{debug%s}' % i],
+    'hints': ['Flag is rgbCTF{debug%d}' % i],
     'flagCaseSensitive': False,
-    'flag': 'rgbCTF{debug%s}' % i,
+    'flag': 'rgbCTF{debug%d}' % i,
     'points': 420
   }
   request2 = requests.post('http://localhost:5000/api/challenge/add', json=payload2, cookies=cookies)

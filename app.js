@@ -1,4 +1,3 @@
-const express = require('express');
 // const session = require('express-session');
 // const MongoStore = require('connect-mongo')(session);
 const path = require('path');
@@ -14,6 +13,10 @@ const redis = require('redis');
 
 dotenv.config();
 
+// The express import is down here as it uses `debug`,
+// so using debug with it may help with overall debugging
+// when using Express and it doesn't work
+const express = require('express');
 const debug = require('debug')('rgbctf-backend');
 
 // This has to be done here or debug dies.
@@ -35,9 +38,10 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
+    dbName: process.env.DBNAME || 'rgbCTF',
   })
   .then((r) => {
-    debug(`mongoDB connected to on port ${r.connection.port}`);
+    debug(`mongoDB connected on port ${r.connection.port}`);
   })
   .catch((e) => {
     debug(`Error connecting to mongodb: ${e.message}`);
@@ -47,7 +51,7 @@ mongoose
 app.locals.redis = redis.createClient(process.env.REDISPORT || 6379, process.env.REDISHOST || '127.0.0.1');
 
 app.locals.redis.on('connect', () => {
-  debug(`redis connected to on port ${process.env.REDISPORT}`);
+  debug(`redis connected on port ${process.env.REDISPORT || 6379}`);
 });
 
 app.use(cookieParser());
@@ -59,6 +63,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('port', process.env.PORT || 3000);
+// Disable X-Powered-By as it's generally not the best idea, though we're running on open source,
+// so anyone who knows the source will know that it's using Express. However, it does help prevent
+// automated tools from finding data/vulns automatically.
+app.disable('x-powered-by');
 // We're doing API stuff so we don't want caching, as it messes up a bit of stuff.
 app.disable('etag');
 app.use(ejwt({

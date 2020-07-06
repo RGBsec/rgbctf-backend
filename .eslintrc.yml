@@ -1,3 +1,5 @@
+
+
 extends:
   - "airbnb"
 
@@ -14,3 +16,17 @@ rules:
       - "__"
       - "___"
       - "____"
+
+overrides:
+  - files: ['tests/**/*']
+    plugins:
+      - "mocha"
+    env:
+      mocha: true
+    extends:
+      - "plugin:mocha/recommended"
+    rules:
+      "prefer-arrow-callback":
+        - off
+      "func-names":
+        - off

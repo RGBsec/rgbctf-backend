@@ -40,9 +40,11 @@ yarn install
 Create a `.env` file in the local directory with these values:
 
 - `MONGODB`: Required. This is a [MongoDB connection string](https://docs.mongodb.com/manual/reference/connection-string/) used to connect to the backend database. If authentication or SSL is enabled, you must specify that in the connection string via the respective fields.
+- `DBNAME`: Optional. The MongoDB database name to use . Defaults to `rgbCTF`.
 - `COOKIESECRET`: Required. This is the secret used for [express-session](https://www.npmjs.com/package/express-session). This is used to sign the session ID cookie. It is recommended that this value is randomly generated.
 - `PORT`: Optional. This is the port used for this application. It defaults to `3000` if not specified.
-- `DEBUG`: Optional. Setting it to "rgbctf-backend" will cause debug messages to be logged.
+- `DEBUG`: Optional. Setting it to "rgbctf-backend" will cause debug messages to be logged. See the [`debug`](https://www.npmjs.com/package/debug) docs. Setting it to `express:*` or adding `,express:*` will enable Express debugging as well (warning: Express debug output is **extremely** verbose).
+- `NODE_ENV`: Optional. Set to `production` in production, as it disables development features in Express which can reduce performance/reliability.
 - `REDISPORT`: Optional. The port for the Redis instance. Defaults to `6379`.
 - `REDISHOST`: Optional. The host for the Redis instance. Defaults to `127.0.0.1`.
 - `ALLOWCORS`: Optional. If present with any non-empty string, CORS will be enabled with an origin of `http://localhost:3000`. This is mainly used for testing the frontend with the API.
