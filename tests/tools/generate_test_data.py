@@ -87,7 +87,7 @@ def gen_challs():
   challs = pd.DataFrame(columns=['_id', 'name', 'description', 'hints', 'flagCaseSensitive', 'points', 'flag', 'category'])
   for i in range(0, 100):
     chall = {
-      'id': { '$oid': generate_objectid() },
+      '_id': { '$oid': generate_objectid() },
       'name': 'Debug Challenge #%d' % i,
       'description': 'Debug Challenge #%d' % i,
       'category': 'Debug',
