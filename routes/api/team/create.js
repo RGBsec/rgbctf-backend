@@ -25,7 +25,11 @@ router.post('/', (req, res, next) => {
 
   // This code was abstracted to /utils/team.js to allow for simpler code
   // when making a team on registration.
-  team.register(name, inviteCode, req.session.userId, next, (response) => {
+  team.register(name, inviteCode, req.session.userId, (response) => {
+    if (err) {
+      next(err);
+      return;
+    }
     res.json(response);
     res.end();
   });

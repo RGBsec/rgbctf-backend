@@ -26,7 +26,11 @@ router.post('/', (req, res, next) => {
 
   // This code was abstracted to /utils/team.js to allow for simpler code
   // when joining a team on registration.
-  team.join(name, inviteCode, req.session.userId, next, (response) => {
+  team.join(name, inviteCode, req.session.userId, (err, response) => {
+    if (err) {
+      next(err);
+      return;
+    }
     res.json(response);
     res.end();
   });

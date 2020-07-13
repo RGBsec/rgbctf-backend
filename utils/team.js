@@ -4,10 +4,10 @@ const Team = require('../models/team');
 const User = require('../models/user');
 
 // Register a team, with the user ID as the first user.
-const register = (name, inviteCode, userId, next, callback) => {
+const register = (name, inviteCode, userId, callback) => {
   Team.exists({ name }).then((exists) => {
     if (exists) {
-      next(createError(422, 'Team Exists'));
+      callback(createError(422, 'Team Exists'), null);
     } else {
       const team = new Team({
         name,
@@ -19,35 +19,35 @@ const register = (name, inviteCode, userId, next, callback) => {
       team.save((saveE, savedTeam) => {
         if (saveE) {
           debug(`create/team: err: ${saveE}`);
-          next(createError(500, 'Internal Error')); return;
+          callback(createError(500, 'Internal Error'), null); return;
         }
         User.findByIdAndUpdate(userId, { teamId: savedTeam._id }, (updateE) => {
           if (updateE) {
             debug(`create/team: err: ${saveE}`);
-            next(createError(500, 'Internal Error'));
+            callback(createError(500, 'Internal Error'), null);
           } else {
-            callback({ success: true, msg: 'team created' });
+            callback(null, { success: true, msg: 'team created' });
           }
         });
       });
     }
   }).catch((e) => {
     debug(`create/team: err: ${e}`);
-    next(createError(500, 'Internal Error'));
+    callback(createError(500, 'Internal Error'), null);
   });
 };
 
 // Join a team, with the user ID being the user to add.
-const join = (name, inviteCode, userId, next, callback) => {
+const join = (name, inviteCode, userId, callback) => {
   User.findById(userId, 'teamId').then((user) => {
     if (user.teamId !== null) {
-      next(createError(422, 'Already On Team'));
+      callback(createError(422, 'Already On Team'), null);
       return;
     }
     Team.findOne({ name }, 'inviteCode', (teamE, team) => {
       if (teamE) {
         debug(`join/team: err: ${teamE}`);
-        next(createError(500, 'Internal Error'));
+        callback(createError(500, 'Internal Error'), null);
       } else if (team.inviteCode === inviteCode) {
         Team.findByIdAndUpdate(team._id, {
           $push: {
@@ -56,25 +56,25 @@ const join = (name, inviteCode, userId, next, callback) => {
         }, (updateE) => {
           if (updateE) {
             debug(`join/team: err: ${updateE}`);
-            next(createError(500, 'Internal Error'));
+            callback(createError(500, 'Internal Error'), null);
           } else {
             User.findByIdAndUpdate(userId, { teamId: team._id }, (userUpdateE) => {
               if (userUpdateE) {
                 debug(`join/team: err: ${userUpdateE}`);
-                next(createError(500, 'Internal Error'));
+                callback(createError(500, 'Internal Error'), null);
               } else {
-                callback({ success: true, msg: 'joined team' });
+                callback(null, { success: true, msg: 'joined team' });
               }
             });
           }
         });
       } else {
-        next(createError(403, 'Invalid Invite Code'));
+        callback(createError(403, 'Invalid Invite Code'), null);
       }
     });
   }).catch((e) => {
     debug(`join/team: err: ${e}`);
-    next(createError(500, 'Internal Error'));
+    callback(createError(500, 'Internal Error'), null);
   });
 };
 
