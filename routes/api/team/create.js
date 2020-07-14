@@ -1,6 +1,7 @@
 const express = require('express');
 const Joi = require('@hapi/joi');
 const createError = require('http-errors');
+const { promisify } = require('util');
 const team = require('../../../utils/team');
 
 const router = express.Router();
@@ -12,27 +13,29 @@ const requestSchema = Joi.object({
   inviteCode: Joi.string().required(),
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', async (req, res, next) => {
   const validatedBody = requestSchema.validate(req.body);
   if (validatedBody.error) {
-    next(createError(400, 'Invalid Payload')); return;
+    next(createError(400, 'Invalid Payload'));
+    return;
   }
   const { name, inviteCode } = validatedBody.value;
 
   if (!req.session.uid) {
-    next(createError(403, 'Unauthorized')); return;
+    next(createError(403, 'Unauthorized'));
+    return;
   }
 
   // This code was abstracted to /utils/team.js to allow for simpler code
   // when making a team on registration.
-  team.register(name, inviteCode, req.session.userId, (err, response) => {
-    if (err) {
-      next(err);
-      return;
-    }
-    res.json(response);
-    res.end();
-  });
+  let response;
+  try {
+    await promisify(team.register)(name, inviteCode, req.session.uid);
+  } catch (err) {
+    next(err);
+    return;
+  }
+  res.json(response);
 });
 
 module.exports = router;

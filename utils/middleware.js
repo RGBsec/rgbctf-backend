@@ -147,9 +147,21 @@ const sessid = (req, res, next) => {
   }
 };
 
+const utils = (req, res, next) => {
+  res.apiRes = (msg, err) => {
+    if (msg) {
+      res.json({ success: true, msg });
+    } else {
+      res.json({ success: false, err });
+    }
+  };
+  next();
+};
+
 module.exports = {
   session,
   sessid,
   revoke,
   resolveUserAndTeam,
+  utils,
 };

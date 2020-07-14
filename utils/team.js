@@ -19,7 +19,8 @@ const register = (name, inviteCode, userId, callback) => {
       team.save((saveE, savedTeam) => {
         if (saveE) {
           debug(`create/team: err: ${saveE}`);
-          callback(createError(500, 'Internal Error'), null); return;
+          callback(createError(500, 'Internal Error'), null);
+          return;
         }
         User.findByIdAndUpdate(userId, { teamId: savedTeam._id }, (updateE) => {
           if (updateE) {

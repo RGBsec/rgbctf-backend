@@ -23,37 +23,45 @@ const requestSchema = Joi.alternatives().try(
   }),
 );
 
-router.post('/', (req, res, next) => {
+router.post('/', async (req, res, next) => {
   const validatedBody = requestSchema.validate(req.body);
   if (validatedBody.error) {
     next(createError(400, 'Invalid Payload'));
     return;
   }
   const { name, email, password } = validatedBody.value;
-  const handler = (e, user) => {
-    if (e) {
-      debug(`login/user: err: ${e}`);
-      next(createError(500, 'Internal Error'));
-      return;
+  let user;
+  try {
+    if (email == null) {
+      user = await User.findOne({ name }, 'hash confirmedEmail admin');
+    } else {
+      user = await User.findOne({ email }, 'hash confirmedEmail admin');
     }
-    if (user === null) {
-      next(createError(403, 'Invalid Login'));
-      return;
-    }
-    crypto.checkPassword(password, user.hash).then((success) => {
-      if (success) {
-        req.session.uid = user._id;
-        res.json({ success: true, msg: 'logged in' });
-        res.end();
-      } else {
-        next(createError(403, 'Invalid Login'));
-      }
-    });
-  };
-  if (email == null) {
-    User.findOne({ name }, 'hash confirmedEmail admin', handler);
+  } catch (err) {
+    debug(`login/user: err: ${err.message}`);
+    next(createError(500, 'Internal Error'));
+    return;
+  }
+
+  if (user === null) {
+    next(createError(403, 'Invalid Login'));
+    return;
+  }
+
+  let success;
+  try {
+    success = await crypto.checkPassword(password, user.hand);
+  } catch (err) {
+    debug(`login/user: checkpw: err: ${err.message}`);
+    next(createError(500, 'Internal Error'));
+    return;
+  }
+
+  if (success) {
+    req.session.uid = user._id;
+    res.apiRes('logged in');
   } else {
-    User.findOne({ email }, 'hash confirmedEmail admin', handler);
+    next(createError(403, 'Invalid Login'));
   }
 });
 

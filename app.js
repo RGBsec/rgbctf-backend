@@ -73,6 +73,7 @@ app.use(middleware.revoke);
 app.use(middleware.sessid);
 app.use(middleware.session);
 app.use(middleware.resolveUserAndTeam);
+app.use(middleware.utils);
 
 const getRoutes = (dir) => {
   fs.readdirSync(dir).forEach((p) => {
@@ -106,11 +107,9 @@ app.use((err, req, res, next) => {
     console.log(res.locals.error);
   }
   res.status(status);
-  res.json({ success: false, err: err.message });
+  res.apiRes(null, err.message);
 
   // render the error page
-
-  res.end();
 });
 
 const server = app.listen(app.get('port'), () => {
