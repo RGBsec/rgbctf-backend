@@ -31,7 +31,7 @@
         "express": "~4.17.1",
         "express-jwt": "^6.0.0",
         "express-session": "^1.17.1",
-        "helmet": "^3.23.3",
+        "helmet": "^4.1.0",
         "http-errors": "^1.8.0",
         "jsonwebtoken": "^8.5.1",
         "mongoose": "^5.9.24",
